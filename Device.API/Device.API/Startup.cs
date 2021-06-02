@@ -1,5 +1,6 @@
 using Device.API.Services.Interfaces;
 using Device.API.Services.MockServices;
+using Device.API.Services.Queues;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,8 @@ namespace Device.API
 
             services.AddControllers();
             services.AddTransient<IDeviceService, MockDeviceService>();
+            services.AddTransient<IDeviceQueueService, DeviceQueueService>();
+
             services.AddCors(options => options.AddDefaultPolicy(
                 builder => builder.AllowAnyOrigin()));
 

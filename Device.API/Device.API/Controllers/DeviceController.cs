@@ -1,5 +1,6 @@
 ﻿using Device.API.Models;
 using Device.API.Services.Interfaces;
+using Device.API.Services.Queues;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -14,10 +15,12 @@ namespace Device.API.Controllers
     public class DeviceController : ControllerBase
     {
         private IDeviceService _context;
+        private readonly IDeviceQueueService _queue;
 
-        public DeviceController(IDeviceService context)
+        public DeviceController(IDeviceService context, IDeviceQueueService queue)
         {
             this._context = context;
+            this._queue = queue;
         }
 
         [HttpGet]
@@ -40,7 +43,10 @@ namespace Device.API.Controllers
             var device = _context.GetDeviceBySlug(slug);
             device.ClientName = _context.GetClientName(device.ClientId);
 
+            _queue.SendMessageAsync(device, "devicequeue");
+
             return new JsonResult(device);
         }
+
     }
 }
