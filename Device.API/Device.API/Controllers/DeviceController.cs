@@ -38,12 +38,12 @@ namespace Device.API.Controllers
         }
 
         [HttpGet("{slug}")]
-        public JsonResult GetDeviceBySlug(string slug)
+        public async Task<ActionResult<ScramDevice>> GetDeviceBySlug(string slug)
         {
             var device = _context.GetDeviceBySlug(slug);
             device.ClientName = _context.GetClientName(device.ClientId);
 
-            _queue.SendMessageAsync(device, "devicequeue");
+            await _queue.SendMessageAsync(device, "devicequeue");
 
             return new JsonResult(device);
         }
