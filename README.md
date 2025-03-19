@@ -1,2 +1,2 @@
 # device-api
-This repository is for the backend on the Scram Code Challenge
+This repository is a sample backend .NET Core Web API
